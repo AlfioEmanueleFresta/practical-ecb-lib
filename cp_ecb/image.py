@@ -34,8 +34,8 @@ def read_image(input_file, encrypted=False, silent=False):
     if not silent:
         print("Reading image %s..." % input_file, end=" ", flush=True)
 
-    image = Image.open(input_file)
-    image = image.convert('RGB')
+    image_file = Image.open(input_file)
+    image = image_file.convert('RGB')
 
     image_size = image.size
 
@@ -47,6 +47,8 @@ def read_image(input_file, encrypted=False, silent=False):
 
     if not silent:
         print("OK")
+
+    image_file.close()
 
     return InMemoryImage(w=image_size[0], h=image_size[1],
                          c=3, b=image_b, encrypted=encrypted)
