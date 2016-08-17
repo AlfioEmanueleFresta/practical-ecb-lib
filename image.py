@@ -1,0 +1,135 @@
+from PIL import Image
+
+
+class InMemoryImage:
+    """
+    A very simple class to represent an image.
+    """
+
+    def __init__(self, w, h, c=3,
+                 b=b'', encrypted=False):
+        """
+        Instantiate a new image.
+        :param w: The width of the image (px).
+        :param h: The height of the image (px).
+        :param c: The number of colour channels of the image. Default is 3.
+        :param b: A byte literal for the body of the image.
+        :param encrypted: A flag to say whether the image is encrypted or not.
+        """
+        self.w = w
+        self.h = h
+        self.c = c
+        self.b = b
+        self.encrypted = encrypted
+
+    def __repr__(self):
+        return "<InMemoryImage(%s): channels=%d, width=%d, height=%d>" % (
+            "encrypted" if self.encrypted else "unencrypted",
+            self.c, self.w, self.h
+        )
+
+
+def read_image(input_file, encrypted=False, silent=False):
+
+    if not silent:
+        print("Reading image %s..." % input_file, end=" ", flush=True)
+
+    image = Image.open(input_file)
+    image = image.convert('RGB')
+
+    image_size = image.size
+
+    image_b = b''
+    for y in range(image_size[1]):
+        for x in range(image_size[0]):
+            r, g, b = image.getpixel((x, y))
+            image_b += bytes([r, g, b])
+
+    if not silent:
+        print("OK")
+
+    return InMemoryImage(w=image_size[0], h=image_size[1],
+                         c=3, b=image_b, encrypted=encrypted)
+
+
+def write_image(image, output_file, silent=False):
+
+    if not silent:
+        print("Writing image to file %s..." % output_file, end=" ", flush=True)
+
+    output = Image.new("RGB", (image.w, image.h))
+    data = ()
+    k = 0
+    for i in range(0, len(image.b), image.c):
+        try:
+            pixel = tuple(image.b[x] for x in range(i, i + image.c))
+        except IndexError:  # Dealing with extra padding bytes!
+            break
+
+        data += (pixel,)
+        k += image.c
+        assert max(pixel) <= 255
+        assert min(pixel) >= 0
+
+    assert k <= len(image.b)
+    assert k / image.c >= image.w * image.h
+
+    data = data[:(image.w * image.h)]
+    output.putdata(data)
+    output.save(output_file)
+
+    if not silent:
+        print("OK")
+
+
+def encrypt_image(input, function, silent=False):
+
+    if type(input) is not InMemoryImage:
+        raise ValueError("Need to pass a valid InMemoryImage object.")
+
+    if input.encrypted:
+        raise ValueError("The input image is already encrypted.")
+
+    if not silent:
+        print("Encrypting image...", end=" ", flush=True)
+
+    input.b = function(input.b)
+    input.encrypted = True
+
+    if not silent:
+        print("OK")
+
+    return input
+
+
+def decrypt_image(input, function, silent=False):
+
+    if type(input) is not InMemoryImage:
+        raise ValueError("Need to pass a valid InMemoryImage object.")
+
+    if not input.encrypted:
+        raise ValueError("The input image is not encrypted.")
+
+    if not silent:
+        print("Decrypting image...", end=" ", flush=True)
+
+    input.b = function(input.b)
+    input.encrypted = False
+
+    if not silent:
+        print("OK")
+
+    return input
+
+
+def encrypt_image_file(input_file, function, output_file, silent=False):
+    image = read_image(input_file, silent=silent)
+    image = encrypt_image(image, function, silent=silent)
+    write_image(image, output_file, silent=silent)
+
+
+def decrypt_image_file(input_file, function, output_file, silent=False):
+    image = read_image(input_file, encrypted=True, silent=silent)
+    image = decrypt_image(image, function, silent=silent)
+    write_image(image, output_file, silent=silent)
+
