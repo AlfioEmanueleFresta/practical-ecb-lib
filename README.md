@@ -24,8 +24,8 @@ python3 tests.py
 ### ECB encryption
 
 ```python
-from otp_ecb import encrypt_image_file, decrypt_image_file,\
-                    get_ecb_encrypter, get_ecb_decrypter
+from cp_ecb import encrypt_image_file, decrypt_image_file,\
+                   get_ecb_encrypter, get_ecb_decrypter
 
 key = "This is my secret key."
 
@@ -41,8 +41,8 @@ decrypt_image_file("ecb-encrypted.png", decrypter, "ecb-decrypter.png")
 ### Stream cipher encryption
 
 ```python
-from otp_ecb import encrypt_image_file, decrypt_image_file,\
-                    get_stream_cipher
+from cp_ecb import encrypt_image_file, decrypt_image_file,\
+                   get_stream_cipher
 
 
 cipher = get_stream_cipher(seed="This is my seed")
@@ -55,7 +55,7 @@ decrypt_image_file("otp-encrypted.png", cipher, "ecb-decrypter.png")
 ### Custom encryption
 
 ```python
-from otp_ecb import encrypt_image_file, decrypt_image_file
+from cp_ecb import encrypt_image_file, decrypt_image_file
 
 
 # Define an encryption function which operates on byte literals
