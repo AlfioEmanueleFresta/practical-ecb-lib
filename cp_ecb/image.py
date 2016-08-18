@@ -29,7 +29,7 @@ class InMemoryImage:
         )
 
 
-def load_image(input_file, encrypted=False, silent=False):
+def load_image(input_file, encrypted=False):
     """
     Load an image file into memory as a InMemoryImage object.
 
@@ -38,12 +38,8 @@ def load_image(input_file, encrypted=False, silent=False):
     :return: An instantiated InMemoryImage object.
     """
 
-    if not silent:
-        print("Reading image %s..." % input_file, end=" ", flush=True)
-
     image_file = Image.open(input_file)
     image = image_file.convert('RGB')
-
     image_size = image.size
 
     image_b = b''
@@ -52,20 +48,13 @@ def load_image(input_file, encrypted=False, silent=False):
             r, g, b = image.getpixel((x, y))
             image_b += bytes([r, g, b])
 
-    if not silent:
-        print("OK")
-
     image_file.close()
 
     return InMemoryImage(w=image_size[0], h=image_size[1],
                          c=3, b=image_b, encrypted=encrypted)
 
 
-def save_image(image, output_file, silent=False):
-
-    if not silent:
-        print("Writing image to file %s..." % output_file, end=" ", flush=True)
-
+def save_image(image, output_file):
     output = Image.new("RGB", (image.w, image.h))
     maxlen = len(image.b) - (len(image.b) % image.c)
     data = tuple(tuple(image.b[i:i + image.c]) for i in range(0, maxlen, image.c))
@@ -73,11 +62,8 @@ def save_image(image, output_file, silent=False):
     output.putdata(data)
     output.save(output_file)
 
-    if not silent:
-        print("OK")
 
-
-def _crypt_image(encrypt, input, function, silent=False):
+def _crypt_image(encrypt, input, function):
 
     if type(input) is not InMemoryImage:
         raise ValueError("You need to pass this function a valid InMemoryImage object.")
@@ -88,9 +74,6 @@ def _crypt_image(encrypt, input, function, silent=False):
     elif (not encrypt) and (not input.encrypted):
         raise ValueError("The input image is not flagged as encrypted and can't be decrypted.")
 
-    if not silent:
-        print("%s image..." % ("Encrypting" if encrypt else "Decrypting"), end=" ", flush=True)
-
     input.b = function(input.b)
 
     # Allow return list of ordinals
@@ -99,27 +82,24 @@ def _crypt_image(encrypt, input, function, silent=False):
 
     input.encrypted = encrypt
 
-    if not silent:
-        print("OK")
-
     return input
 
 
-def encrypt_image(input, function, silent=False):
-    return _crypt_image(encrypt=True, input=input, function=function, silent=silent)
+def encrypt_image(input, function):
+    return _crypt_image(encrypt=True, input=input, function=function)
 
 
-def decrypt_image(input, function, silent=False):
-    return _crypt_image(encrypt=False, input=input, function=function, silent=silent)
+def decrypt_image(input, function):
+    return _crypt_image(encrypt=False, input=input, function=function)
 
 
-def encrypt_image_file(input_file, function, output_file, silent=False):
-    image = load_image(input_file, silent=silent)
-    image = encrypt_image(image, function, silent=silent)
-    save_image(image, output_file, silent=silent)
+def encrypt_image_file(input_file, function, output_file):
+    image = load_image(input_file)
+    image = encrypt_image(image, function)
+    save_image(image, output_file)
 
 
-def decrypt_image_file(input_file, function, output_file, silent=False):
-    image = load_image(input_file, encrypted=True, silent=silent)
-    image = decrypt_image(image, function, silent=silent)
-    save_image(image, output_file, silent=silent)
+def decrypt_image_file(input_file, function, output_file):
+    image = load_image(input_file, encrypted=True)
+    image = decrypt_image(image, function)
+    save_image(image, output_file)
