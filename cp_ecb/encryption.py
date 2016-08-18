@@ -1,11 +1,15 @@
-import crypto
-import sys
 import hashlib
 import binascii
-sys.modules['Crypto'] = crypto
 from cp_otp import strxor
 
-from crypto.Cipher import AES
+
+try:
+    from Crypto.Cipher import AES
+
+except ImportError:  # Damn you, OS X
+    import crypto, sys
+    sys.modules['Crypto'] = crypto
+    from crypto.Cipher import AES
 
 
 PADDING = b'\x42'
