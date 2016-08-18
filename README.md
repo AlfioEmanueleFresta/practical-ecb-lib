@@ -111,7 +111,24 @@ decrypt_image_file("ecb-encrypted.png", decrypter, "ecb-decrypted.png")
 `examples/ecb.png`
 
 
-### Custom function (colours inverter)
+### Custom function: Caesar Cipher
+
+```python
+from cp_ecb import encrypt_image_file, decrypt_image_file
+
+
+offset = 128  # The 'key' in Caesar Cipher
+caesar = lambda image: bytes([(pixel + offset) % 0xff for pixel in image])
+
+encrypt_image_file("examples/tux.png", caesar, "caesar.png")
+```
+
+![Caesar encrypted image](https://raw.githubusercontent.com/AlfioEmanueleFresta/practical-ecb-lib/master/examples/caesar.png "Caesar encrypted image")
+
+`examples/caesar.png`
+
+
+### Custom function: colours inverter
 
 ```python
 from cp_ecb import encrypt_image_file, decrypt_image_file
