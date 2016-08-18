@@ -101,6 +101,10 @@ def get_stream_cipher(seed, size=STREAM_LENGTH):
     Creates a function which can be used as a stream cipher, and will be able to
      encrypt *and* decrypt bytes literals.
 
+    Please note that the generated function is NOT a secure stream cipher in any way.
+    The purpose of this function is to create an image which looks similar to one encrypted
+     with a proper stream cipher and deciphers correctly.
+
     :param seed: A string that will be used to seed the stream cipher.
     :param size: The size (in bytes) of the state of the stream cipher. This must be a divisor of the input size.
                  It defaults to three bytes -- as that's always the case for uncompressed RGB images.
