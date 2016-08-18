@@ -1,5 +1,4 @@
 import unittest
-import statistics
 from PIL import Image
 from cp_ecb import load_image, encrypt_image, decrypt_image,\
                    get_ecb_encrypter, get_stream_cipher, encrypt_image_file,\
@@ -29,7 +28,7 @@ def _get_images_difference(file_a, file_b):
     length = len(file_a)
     total = 0
     for a, b in zip(file_a, file_b):
-        difference = statistics.mean([abs(j - k) / 255 for j, k in zip(a, b)])
+        difference = sum([(abs(j - k) / 255) / len(a) for j, k in zip(a, b)])
         total += (difference / length)
     return total
 
