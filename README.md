@@ -83,7 +83,7 @@ from cp_ecb import encrypt_image_file, decrypt_image_file,\
 cipher = get_stream_cipher(seed="This is my seed")
 
 encrypt_image_file("examples/tux.png", cipher, "otp-encrypted.png")
-decrypt_image_file("otp-encrypted.png", cipher, "ecb-decrypter.png")
+decrypt_image_file("otp-encrypted.png", cipher, "otp-decrypted.png")
 ```
 
 ![Stream cipher](https://raw.githubusercontent.com/AlfioEmanueleFresta/practical-ecb-lib/master/examples/otp.png "Stream cipher image")
@@ -103,7 +103,7 @@ encrypter = get_ecb_encrypter(key)
 decrypter = get_ecb_decrypter(key)
 
 encrypt_image_file("examples/tux.png", encrypter, "ecb-encrypted.png")
-decrypt_image_file("ecb-encrypted.png", decrypter, "ecb-decrypter.png")
+decrypt_image_file("ecb-encrypted.png", decrypter, "ecb-decrypted.png")
 ```
 
 ![ECB encrypted image](https://raw.githubusercontent.com/AlfioEmanueleFresta/practical-ecb-lib/master/examples/ecb.png "ECB encrypted image")
