@@ -84,6 +84,13 @@ class ECBTests(unittest.TestCase):
         difference = _get_images_difference(SOURCE_IMAGE, "examples/inverted-d.png")
         self.assertTrue(difference == 0.00)
 
+    def test_make_shorter_invert(self):
+        inverter = lambda image: [0xff - pixel for pixel in image]
+        encrypt_image_file(SOURCE_IMAGE, inverter, "examples/inverted.png", silent=True)
+        decrypt_image_file("examples/inverted.png", inverter, "examples/inverted-d.png", silent=True)
+        difference = _get_images_difference(SOURCE_IMAGE, "examples/inverted-d.png")
+        self.assertTrue(difference == 0.00)
+
     def test_make_caesar(self):
         offset = 128
         caesar_encrypter = lambda image: bytes([(pixel + offset) % 0xff for pixel in image])

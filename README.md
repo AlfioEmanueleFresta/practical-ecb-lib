@@ -118,7 +118,7 @@ from cp_ecb import encrypt_image_file, decrypt_image_file
 
 
 offset = 128  # The 'key' in Caesar Cipher
-caesar = lambda image: bytes([(pixel + offset) % 0xff for pixel in image])
+caesar = lambda image: [(pixel + offset) % 0xff for pixel in image]
 
 encrypt_image_file("examples/tux.png", caesar, "caesar.png")
 ```
@@ -135,7 +135,7 @@ from cp_ecb import encrypt_image_file, decrypt_image_file
 
 
 # Define an function which operates on byte literals
-inverter = lambda image: bytes([0xff - pixel for pixel in image])  # Invert colours
+inverter = lambda image: [0xff - pixel for pixel in image]  # Invert colours
 
 encrypt_image_file("examples/tux.png", inverter, "inverted.png")
 ```

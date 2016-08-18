@@ -82,6 +82,11 @@ def encrypt_image(input, function, silent=False):
         print("Encrypting image...", end=" ", flush=True)
 
     input.b = function(input.b)
+
+    # Allow return list of ordinals
+    if type(input.b) is list:
+        input.b = bytes(input.b)
+
     input.encrypted = True
 
     if not silent:
@@ -102,6 +107,11 @@ def decrypt_image(input, function, silent=False):
         print("Decrypting image...", end=" ", flush=True)
 
     input.b = function(input.b)
+
+    # Allow return list of ordinals
+    if type(input.b) is list:
+        input.b = bytes(input.b)
+
     input.encrypted = False
 
     if not silent:
