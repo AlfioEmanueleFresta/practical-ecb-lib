@@ -23,6 +23,6 @@ setup(
         'Programming Language :: Python :: 3.5',
     ],
 
-    packages=['cb_ecb'],
-    package_dir={'cb_ecb': 'cb_ecb'},
+    packages=['cp_ecb'],
+    package_dir={'cp_ecb': 'cp_ecb'},
 )

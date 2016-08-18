@@ -33,9 +33,8 @@ def _pad_data(data, block_size):
 
 
 def _unpad_data(data, block_size):
-    if __name__ == '__main__':
-        return data.rstrip(PADDING)   # TODO Repeat single character by single character until % block_size == 0.
-                                      #      Test if it is working by using a image of PADDING_SIZE bytes.
+    return data.rstrip(PADDING)   # TODO Repeat single character by single character until % block_size == 0.
+                                  #      Test if it is working by using a image of PADDING_SIZE bytes.
 
 
 def _keystream(key_length, seed):
