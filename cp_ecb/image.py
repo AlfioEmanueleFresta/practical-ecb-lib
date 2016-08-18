@@ -63,34 +63,34 @@ def save_image(image, output_file):
     output.save(output_file)
 
 
-def _crypt_image(encrypt, input, function):
+def _crypt_image(encrypt, image, function):
 
-    if type(input) is not InMemoryImage:
+    if type(image) is not InMemoryImage:
         raise ValueError("You need to pass this function a valid InMemoryImage object.")
 
-    if encrypt and input.encrypted:
+    if encrypt and image.encrypted:
         raise ValueError("The input image is already encrypted.")
 
-    elif (not encrypt) and (not input.encrypted):
+    elif (not encrypt) and (not image.encrypted):
         raise ValueError("The input image is not flagged as encrypted and can't be decrypted.")
 
-    input.b = function(input.b)
+        image.b = function(image.b)
 
     # Allow return list of ordinals
-    if type(input.b) is list:
-        input.b = bytes(input.b)
+    if type(image.b) is list:
+        image.b = bytes(image.b)
 
-    input.encrypted = encrypt
+    image.encrypted = encrypt
 
-    return input
-
-
-def encrypt_image(input, function):
-    return _crypt_image(encrypt=True, input=input, function=function)
+    return image
 
 
-def decrypt_image(input, function):
-    return _crypt_image(encrypt=False, input=input, function=function)
+def encrypt_image(image, function):
+    return _crypt_image(encrypt=True, image=image, function=function)
+
+
+def decrypt_image(image, function):
+    return _crypt_image(encrypt=False, image=image, function=function)
 
 
 def encrypt_image_file(input_file, function, output_file):
