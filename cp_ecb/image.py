@@ -29,7 +29,7 @@ class InMemoryImage:
         )
 
 
-def read_image(input_file, encrypted=False, silent=False):
+def load_image(input_file, encrypted=False, silent=False):
 
     if not silent:
         print("Reading image %s..." % input_file, end=" ", flush=True)
@@ -54,7 +54,7 @@ def read_image(input_file, encrypted=False, silent=False):
                          c=3, b=image_b, encrypted=encrypted)
 
 
-def write_image(image, output_file, silent=False):
+def save_image(image, output_file, silent=False):
 
     if not silent:
         print("Writing image to file %s..." % output_file, end=" ", flush=True)
@@ -107,12 +107,12 @@ def decrypt_image(input, function, silent=False):
 
 
 def encrypt_image_file(input_file, function, output_file, silent=False):
-    image = read_image(input_file, silent=silent)
+    image = load_image(input_file, silent=silent)
     image = encrypt_image(image, function, silent=silent)
-    write_image(image, output_file, silent=silent)
+    save_image(image, output_file, silent=silent)
 
 
 def decrypt_image_file(input_file, function, output_file, silent=False):
-    image = read_image(input_file, encrypted=True, silent=silent)
+    image = load_image(input_file, encrypted=True, silent=silent)
     image = decrypt_image(image, function, silent=silent)
-    write_image(image, output_file, silent=silent)
+    save_image(image, output_file, silent=silent)

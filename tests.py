@@ -1,7 +1,7 @@
 import unittest
 import statistics
 from PIL import Image
-from cp_ecb import read_image, encrypt_image, decrypt_image,\
+from cp_ecb import load_image, encrypt_image, decrypt_image,\
                    get_ecb_encrypter, get_stream_cipher, encrypt_image_file,\
                    decrypt_image_file, get_ecb_decrypter
 
@@ -38,7 +38,7 @@ class ECBTests(unittest.TestCase):
 
     def test_sanity(self):
         invert = lambda x: bytes([255 - y for y in x])
-        image = read_image(SOURCE_IMAGE, silent=True)
+        image = load_image(SOURCE_IMAGE, silent=True)
         original = image.b
         inverted = encrypt_image(image, invert, silent=True)
         self.assertTrue(original != inverted.b)
