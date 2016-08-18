@@ -3,13 +3,12 @@
 This library provides some utility functions that can be used to operate on images
 as a single byte literal -- where each pixel is represented as three bytes (R, G, B).
 
-It allows to define a simple function which operates on a string of bytes and apply
+It allows to define a simple function which operates on a bytes literal and apply
 the function to the pixels body of the image, generating a valid image as output.
 
-The purpose of this library is to allow to demonstrate visually the effects of different
+The purpose of this library is to allow to visually demonstrate the effects of different
 encryption methods on images. For this reason, this library also provides functions to
-encrypt the body using a few different encryption techniques.
-
+encrypt the body using a few different encryption techniques (stream cipher, ECB encryption).
 
 
 This is part of the [Cyber Security Practicals](https://cs.york.ac.uk/cyber-practicals/).
