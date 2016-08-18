@@ -1,6 +1,10 @@
 from setuptools import setup
 from os import path, listdir
+from pip.req import parse_requirements
 
+
+requirements = parse_requirements("%s/requirements.txt" % path.abspath(path.dirname(__file__)), session=False)
+requirements = [str(ir.req) for ir in requirements]
 
 setup(
 

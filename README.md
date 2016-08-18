@@ -19,14 +19,14 @@ Copyright (c)2016 Alfio Emanuele Fresta
 
 ### Requirements
 
-* Python 3,
-* PIP,
+* Python 3.4+,
 * Linux, OS X or (probably) Windows.
 
 
 ### Install
 
 ```bash
+sudo pip3 install -r https://raw.githubusercontent.com/AlfioEmanueleFresta/practical-ecb-lib/master/requirements.txt
 sudo pip3 install git+https://github.com/AlfioEmanueleFresta/practical-ecb-lib.git
 ```
 
@@ -35,6 +35,7 @@ or,
 ```bash
 git clone https://github.com/AlfioEmanueleFresta/practical-ecb-lib.git
 cd practical-ecb-lib/
+sudo pip3 install -r requirements.txt
 sudo pip3 install ./
 ```
 
