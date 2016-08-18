@@ -30,6 +30,13 @@ class InMemoryImage:
 
 
 def load_image(input_file, encrypted=False, silent=False):
+    """
+    Load an image file into memory as a InMemoryImage object.
+
+    :param input_file: The file to load.
+    :param encrypted: Whether to flag the file as an encrypted image or not.
+    :return: An instantiated InMemoryImage object.
+    """
 
     if not silent:
         print("Reading image %s..." % input_file, end=" ", flush=True)
