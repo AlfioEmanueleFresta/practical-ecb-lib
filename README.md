@@ -21,6 +21,7 @@ python3 tests.py
 
 ## Usage
 
+
 ### ECB encryption
 
 ```python
@@ -33,7 +34,7 @@ encrypter = get_ecb_encrypter(key)
 decrypter = get_ecb_decrypter(key)
 
 # Encrypt the image.
-encrypt_image_file("Tux.png", encrypter, "ecb-encrypted.png")
+encrypt_image_file("examples/tux.png", encrypter, "ecb-encrypted.png")
 decrypt_image_file("ecb-encrypted.png", decrypter, "ecb-decrypter.png")
 ```
 
@@ -47,20 +48,19 @@ from cp_ecb import encrypt_image_file, decrypt_image_file,\
 
 cipher = get_stream_cipher(seed="This is my seed")
 
-encrypt_image_file("Tux.png", cipher, "otp-encrypted.png")
+encrypt_image_file("examples/tux.png", cipher, "otp-encrypted.png")
 decrypt_image_file("otp-encrypted.png", cipher, "ecb-decrypter.png")
 ```
 
 
-### Custom encryption
+### Custom function (colours inverter)
 
 ```python
 from cp_ecb import encrypt_image_file, decrypt_image_file
 
 
 # Define an encryption function which operates on byte literals
-invert = lambda x: bytes([255 - v for v in x])  # Invert colours
+inverter = lambda image: bytes([0xff - pixel for pixel in image])  # Invert colours
 
-# Encrypt the image.
-encrypt_image_file("Tux.png", invert, "inverted.png")
+encrypt_image_file("examples/tux.png", inverter, "inverted.png")
 ```
