@@ -70,16 +70,19 @@ def write_image(image, output_file, silent=False):
         print("OK")
 
 
-def encrypt_image(input, function, silent=False):
+def _crypt_image(encrypt, input, function, silent=False):
 
     if type(input) is not InMemoryImage:
-        raise ValueError("Need to pass a valid InMemoryImage object.")
+        raise ValueError("You need to pass this function a valid InMemoryImage object.")
 
-    if input.encrypted:
+    if encrypt and input.encrypted:
         raise ValueError("The input image is already encrypted.")
 
+    elif (not encrypt) and (not input.encrypted):
+        raise ValueError("The input image is not flagged as encrypted and can't be decrypted.")
+
     if not silent:
-        print("Encrypting image...", end=" ", flush=True)
+        print("%s image..." % ("Encrypting" if encrypt else "Decrypting"), end=" ", flush=True)
 
     input.b = function(input.b)
 
@@ -87,37 +90,20 @@ def encrypt_image(input, function, silent=False):
     if type(input.b) is list:
         input.b = bytes(input.b)
 
-    input.encrypted = True
+    input.encrypted = encrypt
 
     if not silent:
         print("OK")
 
     return input
+
+
+def encrypt_image(input, function, silent=False):
+    return _crypt_image(encrypt=True, input=input, function=function, silent=silent)
 
 
 def decrypt_image(input, function, silent=False):
-
-    if type(input) is not InMemoryImage:
-        raise ValueError("Need to pass a valid InMemoryImage object.")
-
-    if not input.encrypted:
-        raise ValueError("The input image is not encrypted.")
-
-    if not silent:
-        print("Decrypting image...", end=" ", flush=True)
-
-    input.b = function(input.b)
-
-    # Allow return list of ordinals
-    if type(input.b) is list:
-        input.b = bytes(input.b)
-
-    input.encrypted = False
-
-    if not silent:
-        print("OK")
-
-    return input
+    return _crypt_image(encrypt=False, input=input, function=function, silent=silent)
 
 
 def encrypt_image_file(input_file, function, output_file, silent=False):
@@ -130,4 +116,3 @@ def decrypt_image_file(input_file, function, output_file, silent=False):
     image = read_image(input_file, encrypted=True, silent=silent)
     image = decrypt_image(image, function, silent=silent)
     write_image(image, output_file, silent=silent)
-
