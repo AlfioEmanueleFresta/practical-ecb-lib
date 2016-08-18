@@ -21,6 +21,8 @@ python3 tests.py
 
 ## Usage
 
+![Original image](https://raw.githubusercontent.com/AlfioEmanueleFresta/practical-ecb-lib/master/examples/tux.png "Original Image")
+
 
 ### ECB encryption
 
