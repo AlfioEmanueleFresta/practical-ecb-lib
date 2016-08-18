@@ -74,7 +74,7 @@ def _crypt_image(encrypt, image, function):
     elif (not encrypt) and (not image.encrypted):
         raise ValueError("The input image is not flagged as encrypted and can't be decrypted.")
 
-        image.b = function(image.b)
+    image.b = function(image.b)
 
     # Allow return list of ordinals
     if type(image.b) is list:
@@ -86,20 +86,44 @@ def _crypt_image(encrypt, image, function):
 
 
 def encrypt_image(image, function):
+    """
+    Encrypt the content of an InMemoryImage using a given function.
+    :param image: The unencrypted InMemoryImage object.
+    :param function: An encryption function which takes a single bytes literal and returns a single bytes literal.
+    :return: An encrypted InMemoryImage object.
+    """
     return _crypt_image(encrypt=True, image=image, function=function)
 
 
 def decrypt_image(image, function):
+    """
+    Decrypt the content of an InMemoryImage using a given function.
+    :param image: The encrypted InMemoryImage object.
+    :param function: A decryption function which takes a single bytes literal and returns a single bytes literal.
+    :return: An unencrypted InMemoryImage object.
+    """
     return _crypt_image(encrypt=False, image=image, function=function)
 
 
 def encrypt_image_file(input_file, function, output_file):
+    """
+    Loads an image file, encrypts its contents and saves it as another image file.
+    :param input_file: The original unencrytped image file.
+    :param function: The encryption function to use. This must take a single bytes literal and return a single bytes literal.
+    :param output_file: The file name for the encrypted image.
+    """
     image = load_image(input_file)
     image = encrypt_image(image, function)
     save_image(image, output_file)
 
 
 def decrypt_image_file(input_file, function, output_file):
+    """
+    Loads an encrypted image file, decrypts its contents and saves it as another image file.
+    :param input_file: The encrypted image file.
+    :param function: The decryption function to use. This must take a single bytes literal and return a single bytes literal.
+    :param output_file: The file name for the decrypted image.
+    """
     image = load_image(input_file, encrypted=True)
     image = decrypt_image(image, function)
     save_image(image, output_file)
