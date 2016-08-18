@@ -99,9 +99,9 @@ def _strxor(a, b):
     if len(a) != len(b):
         raise ValueError("Inputs need to be of the same length.")
     if type(a) is str:
-        a = bytes(a, 'utf-8')
+        a = bytes(a, 'latin1')
     if type(b) is str:
-        b = bytes(b, 'utf-8')
+        b = bytes(b, 'latin1')
     return bytes([i ^ j for i, j in zip(a, b)])
 
 
