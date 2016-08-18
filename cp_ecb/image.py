@@ -60,22 +60,8 @@ def write_image(image, output_file, silent=False):
         print("Writing image to file %s..." % output_file, end=" ", flush=True)
 
     output = Image.new("RGB", (image.w, image.h))
-    data = ()
-    k = 0
-    for i in range(0, len(image.b), image.c):
-        try:
-            pixel = tuple(image.b[x] for x in range(i, i + image.c))
-        except IndexError:  # Dealing with extra padding bytes!
-            break
-
-        data += (pixel,)
-        k += image.c
-        assert max(pixel) <= 255
-        assert min(pixel) >= 0
-
-    assert k <= len(image.b)
-    assert k / image.c >= image.w * image.h
-
+    maxlen = len(image.b) - (len(image.b) % image.c)
+    data = tuple(tuple(image.b[i:i + image.c]) for i in range(0, maxlen, image.c))
     data = data[:(image.w * image.h)]
     output.putdata(data)
     output.save(output_file)
