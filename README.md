@@ -53,7 +53,7 @@ python3 tests.py
   to make the resulting output a valid image. The decrypter therefore needs to apply padding again, 
   and the union of these two factors *will* cause the last pixels of the image to be corrupted.
   
-* **This library is slow on large images.**
+* **This library is not efficient for large images.**
   Currently this library uses PIL's `Image.putdata` which writes the image pixel by pixel,
   and is as slow as it can possibly get. May be fixed at a later time.
   
