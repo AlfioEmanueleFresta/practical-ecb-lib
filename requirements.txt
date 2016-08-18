@@ -1,3 +1,2 @@
 pycrypto
-git+https://github.com/AlfioEmanueleFresta/practical-one-time-pad-c-extension.git
 Pillow

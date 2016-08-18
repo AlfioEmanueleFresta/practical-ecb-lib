@@ -1,6 +1,5 @@
 import hashlib
 import binascii
-from cp_otp import strxor
 
 
 try:
@@ -96,6 +95,16 @@ def get_ecb_decrypter(key, block_size=BLOCK_SIZE, key_length=KEY_LENGTH):
     return decrypter
 
 
+def _strxor(a, b):
+    if len(a) != len(b):
+        raise ValueError("Inputs need to be of the same length.")
+    if type(a) is str:
+        a = bytes(a, 'utf-8')
+    if type(b) is str:
+        b = bytes(b, 'utf-8')
+    return bytes([i ^ j for i, j in zip(a, b)])
+
+
 def get_stream_cipher(seed, size=STREAM_LENGTH):
     """
     Creates a function which can be used as a stream cipher, and will be able to
@@ -114,7 +123,7 @@ def get_stream_cipher(seed, size=STREAM_LENGTH):
         y = b''
         for data_start_index, key in zip(range(0, len(x), size),
                                          _keystream(key_length=size, seed=seed)):
-            y += strxor(x[data_start_index:data_start_index + size], key)
+            y += _strxor(x[data_start_index:data_start_index + size], key)
         return y
 
     return encrypter

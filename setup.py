@@ -27,6 +27,8 @@ setup(
         'Programming Language :: Python :: 3.5',
     ],
 
+    install_requires=requirements,
+
     packages=['cp_ecb'],
     package_dir={'cp_ecb': 'cp_ecb'},
 )
