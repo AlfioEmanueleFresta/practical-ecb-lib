@@ -31,9 +31,8 @@ def _pad_data(data, block_size):
     return data
 
 
-def _unpad_data(data, block_size):
-    return data.rstrip(PADDING)   # TODO Repeat single character by single character until % block_size == 0.
-                                  #      Test if it is working by using a image of PADDING_SIZE bytes.
+def _unpad_data(data, dest_size, block_size):
+    return data[:dest_size]
 
 
 def _keystream(key_length, seed):
@@ -87,9 +86,10 @@ def get_ecb_decrypter(key, block_size=BLOCK_SIZE, key_length=KEY_LENGTH):
 
     def decrypter(x):
         cipher = AES.AESCipher(key[:32], AES.MODE_ECB)
+        dest_size = len(x)
         x = _pad_data(x, block_size=block_size)  # Yes, this is a hack -- read above.
         x = cipher.decrypt(x)
-        x = _unpad_data(x, block_size=block_size)
+        x = _unpad_data(x, dest_size=dest_size, block_size=block_size)
         return x
     
     return decrypter

@@ -7,13 +7,14 @@ from cp_ecb import load_image, encrypt_image, decrypt_image,\
 
 SOURCE_IMAGE_TUX = "examples/tux.png"
 SOURCE_IMAGE_42 = "examples/42.png"
-TARGET_DIFFERENCE = 0.00005
+
+TARGET_DIFFERENCE_TUX = 4
+TARGET_DIFFERENCE_42 = 4
 
 
 def _get_images_difference(file_a, file_b):
     """
-    Gets the average pixel value difference between two images
-     of the same size.
+    Gets the number of different pixels between two images.
     :param file_a: Filename A.
     :param file_b: Filename B.
     :return: A value between 0 and 1.
@@ -28,10 +29,10 @@ def _get_images_difference(file_a, file_b):
         raise ValueError("Images have different size.")
     length = len(file_a)
     total = 0
+    different = 0
     for a, b in zip(file_a, file_b):
-        difference = sum([(abs(j - k) / 255) / len(a) for j, k in zip(a, b)])
-        total += (difference / length)
-    return total
+        different += sum([0 if j == k else 1 for j, k in zip(a, b)])
+    return different / 3
 
 
 class ECBTests(unittest.TestCase):
@@ -53,13 +54,13 @@ class ECBTests(unittest.TestCase):
         decrypter = get_ecb_decrypter(key)
         decrypt_image_file("examples/ecb.png", decrypter, "examples/ecb-d.png")
         difference = _get_images_difference(SOURCE_IMAGE_TUX, "examples/ecb-d.png")
-        self.assertTrue(difference <= TARGET_DIFFERENCE)
+        self.assertTrue(difference <= TARGET_DIFFERENCE_TUX)
 
         # Use a wrong decrypter
         decrypter = get_ecb_decrypter("Some other key")
         decrypt_image_file("examples/ecb.png", decrypter, "examples/ecb-x.png")
         difference = _get_images_difference(SOURCE_IMAGE_TUX, "examples/ecb-x.png")
-        self.assertTrue(difference > TARGET_DIFFERENCE)
+        self.assertTrue(difference > TARGET_DIFFERENCE_TUX)
 
     def test_ecb_padding(self):
         key = "My secret key"
@@ -67,8 +68,8 @@ class ECBTests(unittest.TestCase):
         encrypt_image_file(SOURCE_IMAGE_42, encrypter, "examples/ecb-42.png")
         decrypter = get_ecb_decrypter(key)
         decrypt_image_file("examples/ecb-42.png", decrypter, "examples/ecb-42-d.png")
-        difference = _get_images_difference(SOURCE_IMAGE_TUX, "examples/ecb-42-d.png")
-        self.assertTrue(difference <= TARGET_DIFFERENCE)
+        difference = _get_images_difference(SOURCE_IMAGE_42, "examples/ecb-42-d.png")
+        self.assertTrue(difference <= TARGET_DIFFERENCE_42)
 
     def test_make_otp(self):
         cipher = get_stream_cipher(seed="My secret seed")
@@ -77,13 +78,13 @@ class ECBTests(unittest.TestCase):
         # Decrypt correctly
         decrypt_image_file("examples/otp.png", cipher, "examples/otp-d.png")
         difference = _get_images_difference(SOURCE_IMAGE_TUX, "examples/otp-d.png")
-        self.assertTrue(difference <= TARGET_DIFFERENCE)
+        self.assertTrue(difference <= TARGET_DIFFERENCE_TUX)
 
         # Use a wrong cipher to decrypt
         cipher = get_stream_cipher(seed="Not my secret seed")
         decrypt_image_file("examples/otp.png", cipher, "examples/otp-d.png")
         difference = _get_images_difference(SOURCE_IMAGE_TUX, "examples/otp-d.png")
-        self.assertTrue(difference > TARGET_DIFFERENCE)
+        self.assertTrue(difference > TARGET_DIFFERENCE_TUX)
 
     def test_make_invert(self):
         inverter = lambda image: bytes([0xff - pixel for pixel in image])
