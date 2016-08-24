@@ -140,4 +140,21 @@ encrypt_image_file("examples/tux.png", inverter, "inverted.png")
 
 ![Inverted colours image](https://raw.githubusercontent.com/AlfioEmanueleFresta/practical-ecb-lib/master/examples/inverted.png "Inverted colours image")
 
-`examples/inverted.png`
+
+### Custom function: Steganography example
+
+```python
+from cp_ecb import decrypt_image_file
+
+OFF, ON = 0x00, 0xFF
+decrypter = lambda image: [OFF if pixel % 2 else ON for pixel in image]
+
+decrypt_image_file("examples/tux-secret.png", decrypter, "tux-message.png")
+```
+
+
+![Original image w/ secret message](https://raw.githubusercontent.com/AlfioEmanueleFresta/practical-ecb-lib/master/examples/tux-secret.png "Original image w/ secret message")
+->
+![Secret message](https://raw.githubusercontent.com/AlfioEmanueleFresta/practical-ecb-lib/master/examples/tux-message.png "Secret message")
+
+`examples/tux-secret.png` -> `examples/tux-message.png`
