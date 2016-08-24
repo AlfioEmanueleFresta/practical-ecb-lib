@@ -152,6 +152,7 @@ decrypter = lambda image: [OFF if pixel % 2 else ON for pixel in image]
 decrypt_image_file("examples/tux-secret.png", decrypter, "tux-message.png")
 ```
 
+Extracting a secret message from the lowest order bits of each colour value in the image.
 
 ![Original image w/ secret message](https://raw.githubusercontent.com/AlfioEmanueleFresta/practical-ecb-lib/master/examples/tux-secret.png "Original image w/ secret message")
 ->
